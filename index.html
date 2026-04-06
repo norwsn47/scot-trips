@@ -19,15 +19,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
 #progress-bar-wrap{width:140px;background:rgba(255,255,255,0.25);border-radius:99px;height:6px;overflow:hidden}
 #progress-bar{height:100%;background:#d8f3dc;border-radius:99px;transition:width .4s}
 #pct-label{font-size:.72em;color:rgba(255,255,255,0.7);margin-top:3px;text-align:center}
-#controls{background:#fff;padding:10px 24px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #E8E8E8;z-index:1000;position:relative}
-.search-wrap{position:relative;display:flex;align-items:center}
+#controls{background:#fff;padding:10px 16px;display:flex;gap:8px;align-items:center;border-bottom:1px solid #E8E8E8;z-index:1000;position:relative}
+.search-wrap{position:relative;display:flex;align-items:center;flex:1}
 .search-wrap svg{position:absolute;left:10px;pointer-events:none}
-#search{background:#F6F6F6;border:1px solid #E8E8E8;color:#2d2d2d;padding:7px 14px 7px 32px;border-radius:99px;font-size:.82em;width:200px;font-family:inherit;outline:none;transition:border-color .2s}
+#search{background:#F6F6F6;border:1px solid #E8E8E8;color:#2d2d2d;padding:7px 14px 7px 32px;border-radius:99px;font-size:.82em;width:100%;font-family:inherit;outline:none;transition:border-color .2s}
 #search:focus{border-color:#A6CEE3}
 #search::placeholder{color:#bbb}
-#search-type{background:#F6F6F6;border:1px solid #E8E8E8;color:#666;padding:7px 10px;border-radius:99px;font-size:.78em;font-family:inherit;cursor:pointer;outline:none}
 .filter-btn{background:#F6F6F6;border:1px solid #E8E8E8;color:#666;padding:6px 14px;border-radius:99px;cursor:pointer;font-size:.78em;font-family:inherit;font-weight:500;transition:all .2s;display:flex;align-items:center;gap:5px}
-.filter-btn.danger{border-color:#FDBA74;color:#c05c00}
 #main{display:flex;flex:1;overflow:hidden;position:relative}
 #map{flex:1;min-height:0}
 .leaflet-container{background:#A6CEE3 !important}
@@ -114,13 +112,19 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
 .popup-info{font-size:.8em;color:#888;margin-bottom:8px}
 .popup-btn{background:#B7E4C7;color:#1a4a2e;border:none;padding:7px 12px;border-radius:99px;cursor:pointer;font-size:.8em;font-weight:600;font-family:inherit;width:100%;transition:background .2s}
 .popup-btn.undo{background:#FDBA74;color:#7a3800}
-#legend{position:absolute;bottom:24px;right:10px;background:rgba(255,255,255,0.95);padding:12px 14px;border-radius:10px;font-size:.72em;z-index:1000;border:1px solid #E8E8E8;line-height:2;pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,0.08);color:#555}
+#legend{position:absolute;bottom:24px;right:14px;background:rgba(255,255,255,0.95);padding:12px 14px;border-radius:10px;font-size:.72em;z-index:1000;border:1px solid #E8E8E8;line-height:2;pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,0.08);color:#555}
 #legend .leg-title{font-size:.8em;font-weight:600;color:#999;letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px}
 .leg-row{display:flex;align-items:center;gap:7px}
-#mobile-map-btn,#mobile-list-btn{display:none}
+#mobile-map-btn,#mobile-list-btn,#mobile-legend-btn{display:none}
 #mobile-map-btn{position:absolute;top:10px;right:10px;z-index:1001;background:rgba(255,255,255,0.95);border:1px solid #E8E8E8;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.72em;font-weight:500;font-family:inherit;color:#2d2d2d;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+#mobile-legend-btn{position:absolute;top:46px;right:10px;z-index:1001;background:rgba(255,255,255,0.95);border:1px solid #E8E8E8;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.72em;font-weight:500;font-family:inherit;color:#2d2d2d;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+#mobile-select-done{display:none;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:1001;background:#2d6a4f;color:#fff;border:none;border-radius:99px;padding:11px 24px;cursor:pointer;font-size:.82em;font-weight:600;font-family:inherit;box-shadow:0 3px 12px rgba(0,0,0,0.25);align-items:center;gap:6px;white-space:nowrap}
 #mobile-list-btn{background:none;border:none;border-left:1px solid #E8E8E8;padding:0 12px;cursor:pointer;color:#888;align-items:center;justify-content:center;flex-shrink:0}
 @media(max-width:768px){
+  #header{padding:10px 16px;flex-wrap:nowrap;gap:10px}
+  #progress-bar-wrap,#pct-label{display:none}
+  #stats{gap:0}
+  #search{font-size:16px}
   #main{flex-direction:column}
   #map{height:50vh;flex:none;width:100%}
   #sidebar{width:100%;border-left:none;border-top:1px solid #E8E8E8}
@@ -128,8 +132,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
   #main.map-full #sidebar{display:none}
   #main.list-full #map{display:none}
   #main.list-full #sidebar{flex:1;border-top:none}
-  #mobile-map-btn,#mobile-list-btn{display:flex}
-  #legend{bottom:10px;right:8px}
+  #mobile-map-btn,#mobile-list-btn,#mobile-legend-btn{display:flex}
+  #legend{display:none}
+  #legend.mobile-open{display:block;bottom:50px;right:8px;pointer-events:auto}
+  #mobile-select-done.active{display:flex}
 }
 </style>
 </head>
@@ -147,26 +153,29 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
     </div>
   </div>
 </div>
-<div id="controls">
-  <div class="search-wrap">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input id="search" type="text" placeholder="Search...">
-  </div>
-  <select id="search-type">
-    <option value="all">Munros + Bothies</option>
-    <option value="munros">Munros only</option>
-    <option value="bothies">Bothies only</option>
-  </select>
-  <button class="filter-btn danger" id="reset-btn">Reset</button>
-</div>
 <div id="main">
   <div id="map">
     <button id="mobile-map-btn" onclick="mobileExpand('map')">
       <svg id="map-btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
       <span id="map-btn-label">Expand map</span>
     </button>
+    <button id="mobile-legend-btn" onclick="toggleMobileLegend()">Legend</button>
+    <button id="mobile-select-done" onclick="mobileDoneSelecting()">✓ Done — return to trip</button>
+    <div id="legend">
+      <div class="leg-title">Legend</div>
+      <div class="leg-row"><svg width="12" height="12"><circle cx="6" cy="6" r="5" fill="#FDBA74" stroke="#c05c00" stroke-width="1"/></svg>Munro - to do</div>
+      <div class="leg-row"><svg width="12" height="12"><circle cx="6" cy="6" r="5" fill="#B7E4C7" stroke="#2d6a4f" stroke-width="1"/></svg>Munro - done</div>
+      <div class="leg-row"><svg width="12" height="12" viewBox="0 0 16 16" fill="#d0d0d0" stroke="#999" stroke-width="1.2"><polygon points="8,1 15,7 13,7 13,15 3,15 3,7 1,7"/></svg>Bothy - to visit</div>
+      <div class="leg-row"><svg width="12" height="12" viewBox="0 0 16 16" fill="#A6CEE3" stroke="#3a7ca8" stroke-width="1.2"><polygon points="8,1 15,7 13,7 13,15 3,15 3,7 1,7"/></svg>Bothy - visited</div>
+    </div>
   </div>
   <div id="sidebar">
+    <div id="controls">
+      <div class="search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="search" type="text" placeholder="Search...">
+      </div>
+    </div>
     <div id="sidebar-tabs">
       <button class="tab-btn active" id="tab-munros">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M8 3L1 21h22L15 3z"/></svg>Munros
@@ -228,13 +237,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
       <textarea id="bothy-comment" rows="2" placeholder="Leave a note..."></textarea>
       <button id="bothy-save">Save</button>
     </div>
-  </div>
-  <div id="legend">
-    <div class="leg-title">Legend</div>
-    <div class="leg-row"><svg width="12" height="12"><circle cx="6" cy="6" r="5" fill="#FDBA74" stroke="#c05c00" stroke-width="1"/></svg>Munro - to do</div>
-    <div class="leg-row"><svg width="12" height="12"><circle cx="6" cy="6" r="5" fill="#B7E4C7" stroke="#2d6a4f" stroke-width="1"/></svg>Munro - done</div>
-    <div class="leg-row"><svg width="12" height="12" viewBox="0 0 16 16" fill="#d0d0d0" stroke="#999" stroke-width="1.2"><polygon points="8,1 15,7 13,7 13,15 3,15 3,7 1,7"/></svg>Bothy - to visit</div>
-    <div class="leg-row"><svg width="12" height="12" viewBox="0 0 16 16" fill="#A6CEE3" stroke="#3a7ca8" stroke-width="1.2"><polygon points="8,1 15,7 13,7 13,15 3,15 3,7 1,7"/></svg>Bothy - visited</div>
   </div>
 </div>
 <script>
@@ -485,7 +487,7 @@ function initApp() {
   }
 
   // ── Sidebar ───────────────────────────────────────────────────────
-  var activeTab='munros', munroFilter='all', bothyFilter='all', tripFilter='all', searchVal='', searchType='all';
+  var activeTab='munros', munroFilter='all', bothyFilter='all', tripFilter='all', searchVal='';
 
   function renderSidebar(){
     var sf=document.getElementById('sidebar-subfilters');
@@ -505,7 +507,7 @@ function initApp() {
       lc.innerHTML='';
       munros.forEach(function(m){
         var mf=munroFilter==='all'||(munroFilter==='done'&&m.done)||(munroFilter==='todo'&&!m.done);
-        var ms=!searchVal||searchType==='bothies'||m.name.toLowerCase().indexOf(searchVal)>=0;
+        var ms=!searchVal||m.name.toLowerCase().indexOf(searchVal)>=0;
         if(!mf||!ms) return;
         var el=document.createElement('div');
         el.className='list-item'+(m.done?' done':'');
@@ -532,7 +534,7 @@ function initApp() {
       bothyData.forEach(function(b,i){
         var s=getBothy(i);
         var bf=bothyFilter==='all'||(bothyFilter==='visited'&&s.visited)||(bothyFilter==='unvisited'&&!s.visited)||(bothyFilter==='bike'&&b[6]);
-        var ms=!searchVal||searchType==='munros'||b[0].toLowerCase().indexOf(searchVal)>=0;
+        var ms=!searchVal||b[0].toLowerCase().indexOf(searchVal)>=0;
         if(!bf||!ms) return;
         var el=document.createElement('div');
         el.className='list-item'+(s.visited?' done':'');
@@ -657,12 +659,6 @@ function initApp() {
   document.getElementById('tab-bothies').onclick=function(){ switchTab('bothies'); };
   document.getElementById('tab-trips').onclick=function(){ switchTab('trips'); };
   document.getElementById('search').oninput=function(e){ searchVal=e.target.value.toLowerCase().trim(); renderSidebar(); };
-  document.getElementById('search-type').onchange=function(e){ searchType=e.target.value; renderSidebar(); };
-  document.getElementById('reset-btn').onclick=function(){
-    if(!confirm('Reset all progress?')) return;
-    munros.forEach(function(m){ m.done=false; munroMarkers[m.id].setIcon(makeIcon(false)); munroMarkers[m.id].bindPopup(munroPopupHtml(m),{maxWidth:200}); });
-    saveMunros(); updateStats(); renderSidebar();
-  };
 
   function updateStats(){
     var done=munros.filter(function(m){ return m.done; }).length;
@@ -803,7 +799,7 @@ function initApp() {
       var isSelecting=selectMode&&activeDayForSelect===d;
       var addBtn=document.createElement('button');
       addBtn.className='te-day-add'+(isSelecting?' selecting':'');
-      addBtn.textContent=isSelecting?'✓ Selecting for this day — tap Done when finished':'+ Add Munros or Bothies';
+      addBtn.textContent=isSelecting?'✓ Selecting for this day — tap Done when finished':'+ Add Munros';
       (function(day){ addBtn.onclick=function(){
         if(selectMode&&activeDayForSelect===day) exitSelectMode();
         else enterSelectMode(day);
@@ -854,6 +850,7 @@ function initApp() {
     document.getElementById('select-mode-text').textContent=numDays>1?'Adding to Day '+activeDayForSelect+' — click markers on map':'Click markers on map to add/remove';
     document.getElementById('trip-select-mode-bar').style.display='flex';
     map.getContainer().style.cursor='crosshair';
+    if(window.innerWidth<=768){ mobilePushMapFull(); }
     renderPendingItems();
     map.closePopup();
     munros.forEach(function(m){
@@ -874,6 +871,7 @@ function initApp() {
     selectMode=false;
     document.getElementById('trip-select-mode-bar').style.display='none';
     map.getContainer().style.cursor='';
+    if(window.innerWidth<=768){ mobilePopMapFull(); }
     renderPendingItems();
     munros.forEach(function(m){
       if(!munroMarkers[m.id]) return;
@@ -897,6 +895,7 @@ function initApp() {
     document.getElementById('select-mode-text').textContent='Click a bothy on the map for your night stop on Day '+activeDayForSelect;
     document.getElementById('trip-select-mode-bar').style.display='flex';
     map.getContainer().style.cursor='crosshair';
+    if(window.innerWidth<=768){ mobilePushMapFull(); }
     renderPendingItems(); map.closePopup();
     bothyData.forEach(function(_,i){
       if(!bothyMarkers[i]) return;
@@ -914,6 +913,7 @@ function initApp() {
     overnightSelectMode=false;
     document.getElementById('trip-select-mode-bar').style.display='none';
     map.getContainer().style.cursor='';
+    if(window.innerWidth<=768){ mobilePopMapFull(); }
     renderPendingItems();
     bothyData.forEach(function(_,i){
       if(!bothyMarkers[i]) return;
@@ -966,6 +966,38 @@ function initApp() {
     if (mapLbl) mapLbl.textContent = mapFull ? 'Show list' : 'Expand map';
     if (mapIco) mapIco.querySelector('path').setAttribute('d', mapFull ? collapsePath : expandPath);
     if (listIco) listIco.querySelector('path').setAttribute('d', listFull ? collapsePath : expandPath);
+  };
+
+  window.toggleMobileLegend = function() {
+    document.getElementById('legend').classList.toggle('mobile-open');
+  };
+
+  function mobilePushMapFull(){
+    var main=document.getElementById('main');
+    main.classList.remove('list-full');
+    main.classList.add('map-full');
+    setTimeout(function(){ map.invalidateSize(); },50);
+    var mapLbl=document.getElementById('map-btn-label');
+    var mapIco=document.getElementById('map-btn-icon');
+    if(mapLbl) mapLbl.textContent='Show list';
+    if(mapIco) mapIco.querySelector('path').setAttribute('d',collapsePath);
+    document.getElementById('mobile-select-done').classList.add('active');
+  }
+
+  function mobilePopMapFull(){
+    var main=document.getElementById('main');
+    main.classList.remove('map-full');
+    setTimeout(function(){ map.invalidateSize(); },50);
+    var mapLbl=document.getElementById('map-btn-label');
+    var mapIco=document.getElementById('map-btn-icon');
+    if(mapLbl) mapLbl.textContent='Expand map';
+    if(mapIco) mapIco.querySelector('path').setAttribute('d',expandPath);
+    document.getElementById('mobile-select-done').classList.remove('active');
+  }
+
+  window.mobileDoneSelecting = function(){
+    if(overnightSelectMode) exitOvernightSelectMode();
+    else exitSelectMode();
   };
 }
 </script>
