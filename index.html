@@ -333,22 +333,29 @@ function initApp() {
 
   if(trips.length===0){
     trips = [{
-      name: 'Cairngorms Weekend',
-      desc: 'A classic high-level circuit taking in the Cairngorm plateau and Glen Feshie hills.',
+      name: 'Camban Bothy Munro Route',
+      desc: 'A three-day peak-bagging adventure using Camban Bothy as a base to summit all 12 Munros across the Five Sisters of Kintail and Three Brothers ridges.',
       link: '',
       days: 3,
       status: 'planned',
       created: Date.now(),
       overnights: {
-        1: {type:'bothy'},
-        2: {type:'camp'}
+        1: {type:'bothy', id:15, name:'Camban'},
+        2: {type:'bothy', id:15, name:'Camban'}
       },
       items: [
-        {type:'munro', id:5,  name:'Cairn Gorm',             day:1},
-        {type:'munro', id:1,  name:'Ben Macdui',             day:1},
-        {type:'munro', id:2,  name:'Braeriach',              day:2},
-        {type:'munro', id:3,  name:'Cairn Toul',             day:2},
-        {type:'munro', id:4,  name:'Sgor an Lochain Uaine',  day:3}
+        {type:'munro', id:68,  name:'Sgurr Fhuaran',           day:1},
+        {type:'munro', id:132, name:'Sgurr na Carnach',         day:1},
+        {type:'munro', id:104, name:'Sgurr na Ciste Duibhe',    day:1},
+        {type:'munro', id:205, name:'Saileag',                  day:1},
+        {type:'munro', id:95,  name:'Sgurr a Bhealaich Dheirg', day:1},
+        {type:'munro', id:136, name:'Aonach Meadhoin',          day:1},
+        {type:'munro', id:173, name:'Ciste Dhubh',              day:1},
+        {type:'munro', id:21,  name:'Sgurr nan Ceathreamhnan',  day:2},
+        {type:'munro', id:165, name:'Mullach na Dheiragain',    day:2},
+        {type:'munro', id:268, name:'An Socach Glen Affric',    day:2},
+        {type:'munro', id:48,  name:'Mullach Fraoch-choire',    day:3},
+        {type:'munro', id:33,  name:'A Chraileag',              day:3}
       ]
     }];
     saveTrips();
