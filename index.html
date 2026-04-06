@@ -9,7 +9,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;height:100vh;display:flex;flex-direction:column;font-size:16px}
+body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;height:100vh;height:100dvh;display:flex;flex-direction:column;font-size:16px;overflow:hidden}
 #header{background:#2d6a4f;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;z-index:1000;position:relative}
 #header h1{font-size:1.15em;font-weight:600;color:#fff;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
 #stats{display:flex;gap:28px;align-items:center}
@@ -124,7 +124,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
   #header{padding:10px 16px;flex-wrap:nowrap;gap:10px}
   #progress-bar-wrap,#pct-label{display:none}
   #stats{gap:0}
-  #search{font-size:16px}
+  input,textarea,select{font-size:16px!important}
   #main{flex-direction:column}
   #map{height:50vh;flex:none;width:100%}
   #sidebar{width:100%;border-left:none;border-top:1px solid #E8E8E8}
@@ -136,6 +136,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
   #legend{display:none}
   #legend.mobile-open{display:block;bottom:50px;right:8px;pointer-events:auto}
   #mobile-select-done.active{display:flex}
+  #mobile-select-done{bottom:60px}
+  #sidebar.trip-editing #controls{display:none}
 }
 </style>
 </head>
@@ -329,6 +331,29 @@ function initApp() {
   try{ trips = JSON.parse(localStorage.getItem('trips_v1')||'[]'); }catch(e){}
   function saveTrips(){ try{ localStorage.setItem('trips_v1',JSON.stringify(trips)); }catch(e){} }
 
+  if(trips.length===0){
+    trips = [{
+      name: 'Cairngorms Weekend',
+      desc: 'A classic high-level circuit taking in the Cairngorm plateau and Glen Feshie hills.',
+      link: '',
+      days: 3,
+      status: 'planned',
+      created: Date.now(),
+      overnights: {
+        1: {type:'bothy'},
+        2: {type:'camp'}
+      },
+      items: [
+        {type:'munro', id:5,  name:'Cairn Gorm',             day:1},
+        {type:'munro', id:1,  name:'Ben Macdui',             day:1},
+        {type:'munro', id:2,  name:'Braeriach',              day:2},
+        {type:'munro', id:3,  name:'Cairn Toul',             day:2},
+        {type:'munro', id:4,  name:'Sgor an Lochain Uaine',  day:3}
+      ]
+    }];
+    saveTrips();
+  }
+
   // ── Markers ───────────────────────────────────────────────────────
   var munroMarkers = {};
   function makeIcon(done){
@@ -379,7 +404,7 @@ function initApp() {
       return '<div class="popup-tag bothy"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M1 7L8 1l7 6"/><path d="M3 7v8h10V7"/></svg>Bothy</div><div class="popup-inner"><div class="popup-name">'+name+'</div><div class="popup-info">'+region+(stove?' - '+stove:'')+'</div>'+bikeHtml+'<div style="font-size:.76em;color:#888;margin-bottom:10px;line-height:1.5;">'+access+'</div>'+stars+comment+'<div style="display:flex;gap:6px;">'+visitBtn+'<button class="popup-btn" style="flex:1;background:#dde9f5;color:#1a3a5c" onclick="openBothyDetail('+i+')">Rate</button></div></div>';
     }
     var mk=L.marker([lat,lng],{icon:makeBothyIcon(getBothy(i).visited)}).addTo(map);
-    mk.bindPopup(makePopup(),{maxWidth:220});
+    mk.bindPopup(makePopup(),{maxWidth:250});
     bothyMarkers[i]={mk:mk,makePopup:makePopup,lat:lat,lng:lng,name:name};
     // Hover only active on bothies tab — don't bind yet; switchTab handles it
   });
@@ -633,7 +658,7 @@ function initApp() {
       if(!bothyMarkers[i]) return;
       if(tab==='bothies'){
         // Restore popup and hover on bothies tab
-        bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:220});
+        bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:250});
         bindBothyHover(i);
       } else {
         // On munros or trips tab: remove hover; trips tab also removes popup
@@ -642,7 +667,7 @@ function initApp() {
           bothyMarkers[i].mk.unbindPopup();
         } else {
           // munros tab: keep popup for click, just no hover
-          bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:220});
+          bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:250});
         }
       }
     });
@@ -727,6 +752,7 @@ function initApp() {
     currentStatus='planned'; updateStatusButtons();
     renderPendingItems();
     document.getElementById('trip-editor').classList.add('open');
+    document.getElementById('sidebar').classList.add('trip-editing');
     clearFilters(); setOpacity('all','1');
   };
 
@@ -744,6 +770,7 @@ function initApp() {
     currentStatus=t.status||'planned'; updateStatusButtons();
     renderPendingItems();
     document.getElementById('trip-editor').classList.add('open');
+    document.getElementById('sidebar').classList.add('trip-editing');
     clearFilters(); setOpacity('all','1');
     if(t.items&&t.items.length>0){
       var lats=[],lngs=[];
@@ -761,6 +788,7 @@ function initApp() {
   function closeTripEditor(){
     exitSelectMode(); exitOvernightSelectMode();
     document.getElementById('trip-editor').classList.remove('open');
+    document.getElementById('sidebar').classList.remove('trip-editing');
     if(activeTab==='trips') setTimeout(function(){ applyTripOverlay('all'); },50);
     else clearFilters();
   }
@@ -881,7 +909,7 @@ function initApp() {
     bothyData.forEach(function(_,i){
       if(!bothyMarkers[i]) return;
       bothyMarkers[i].mk.off('click');
-      bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:220});
+      bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:250});
       // Only re-attach hover if we're on the bothies tab
       if(activeTab==='bothies') bindBothyHover(i);
     });
@@ -918,7 +946,7 @@ function initApp() {
     bothyData.forEach(function(_,i){
       if(!bothyMarkers[i]) return;
       bothyMarkers[i].mk.off('click');
-      bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:220});
+      bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:250});
       if(activeTab==='bothies') bindBothyHover(i);
     });
   }
