@@ -112,7 +112,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
   </h1>
   <div id="stats">
     <div class="stat"><div class="stat-num" id="done-count">0</div><div class="stat-label">Completed</div></div>
-    <div class="stat"><div class="stat-num" id="remaining-count">282</div><div class="stat-label">Remaining</div></div>
+    <div class="stat"><div class="stat-num" id="remaining-count">0</div><div class="stat-label">of 282</div></div>
     <div class="stat">
       <div id="progress-bar-wrap"><div id="progress-bar" style="width:0%"></div></div>
       <div id="pct-label">0% complete</div>
@@ -620,7 +620,7 @@ function initApp() {
   function updateStats(){
     var done=munros.filter(function(m){ return m.done; }).length;
     document.getElementById('done-count').textContent=done;
-    document.getElementById('remaining-count').textContent=282-done;
+    document.getElementById('remaining-count').textContent=done;
     var pct=Math.round(done/282*100);
     document.getElementById('progress-bar').style.width=pct+'%';
     document.getElementById('pct-label').textContent=pct+'% complete';
