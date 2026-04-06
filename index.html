@@ -76,7 +76,22 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
 .te-item-tag.munro{background:#d8f3dc;color:#1b4332}
 .te-item-tag.bothy{background:#dde9f5;color:#1a3a5c}
 .te-item-tag button{background:none;border:none;cursor:pointer;font-size:.9em;color:inherit;opacity:.6;padding:0;line-height:1}
-#trip-add-btn{background:none;border:1px dashed #ccc;border-radius:8px;padding:7px;font-size:.76em;color:#aaa;cursor:pointer;font-family:inherit;width:100%;margin-top:6px;transition:all .2s}
+.te-day-box{border:1px solid #E8E8E8;border-radius:8px;margin-top:10px;overflow:hidden}
+.te-day-label{font-size:.72em;font-weight:600;color:#2d6a4f;background:#f0faf4;padding:6px 10px;border-bottom:1px solid #E8E8E8;letter-spacing:.3px;text-transform:uppercase}
+.te-day-items{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;min-height:34px}
+.te-day-add{background:none;border:none;border-top:1px dashed #e8e8e8;width:100%;padding:6px 10px;font-size:.72em;color:#aaa;cursor:pointer;font-family:inherit;text-align:left;transition:color .15s}
+.te-day-add:hover{color:#2d6a4f}
+.te-day-add.selecting{background:#f0faf4;color:#2d6a4f;border-top-color:#b7e4c7}
+.te-night-section{border-top:1px solid #f0f0f0;padding:8px 10px}
+.te-night-hdr{font-size:.68em;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px}
+.te-night-tag{font-size:.72em;padding:3px 9px;border-radius:99px;background:#dde9f5;color:#1a3a5c;display:inline-flex;align-items:center;gap:4px;font-weight:500;margin-bottom:6px}
+.te-night-tag.camp{background:#fff3cd;color:#7a5800}
+.te-night-tag.other{background:#f0f0f0;color:#555}
+.te-night-tag button{background:none;border:none;cursor:pointer;font-size:.9em;color:inherit;opacity:.6;padding:0;line-height:1}
+.te-night-btns{display:flex;gap:5px;flex-wrap:wrap}
+.te-night-btn{background:#F6F6F6;border:1px solid #E8E8E8;color:#666;padding:4px 10px;border-radius:99px;cursor:pointer;font-size:.72em;font-family:inherit;font-weight:500;transition:all .2s}
+.te-night-btn.active{background:#dde9f5;border-color:#A6CEE3;color:#1a3a5c}
+.te-night-btn.selecting{background:#f0faf4;border-color:#b7e4c7;color:#2d6a4f}
 #trip-save-btn{margin-top:16px;background:#2d6a4f;color:#fff;border:none;padding:9px 0;border-radius:99px;cursor:pointer;font-size:.82em;font-weight:600;font-family:inherit;width:100%}
 #trip-del-btn{margin-top:8px;background:none;border:1px solid #e74c3c;color:#e74c3c;padding:7px 0;border-radius:99px;cursor:pointer;font-size:.78em;font-weight:600;font-family:inherit;width:100%;display:none}
 #trip-status-bar button{flex:1;padding:4px 0;border-radius:99px;font-size:.72em;font-weight:500;font-family:inherit;cursor:pointer}
@@ -102,6 +117,20 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
 #legend{position:absolute;bottom:24px;right:10px;background:rgba(255,255,255,0.95);padding:12px 14px;border-radius:10px;font-size:.72em;z-index:1000;border:1px solid #E8E8E8;line-height:2;pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,0.08);color:#555}
 #legend .leg-title{font-size:.8em;font-weight:600;color:#999;letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px}
 .leg-row{display:flex;align-items:center;gap:7px}
+#mobile-map-btn,#mobile-list-btn{display:none}
+#mobile-map-btn{position:absolute;top:10px;right:10px;z-index:1001;background:rgba(255,255,255,0.95);border:1px solid #E8E8E8;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.72em;font-weight:500;font-family:inherit;color:#2d2d2d;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+#mobile-list-btn{background:none;border:none;border-left:1px solid #E8E8E8;padding:0 12px;cursor:pointer;color:#888;align-items:center;justify-content:center;flex-shrink:0}
+@media(max-width:768px){
+  #main{flex-direction:column}
+  #map{height:50vh;flex:none;width:100%}
+  #sidebar{width:100%;border-left:none;border-top:1px solid #E8E8E8}
+  #main.map-full #map{height:100%;flex:1}
+  #main.map-full #sidebar{display:none}
+  #main.list-full #map{display:none}
+  #main.list-full #sidebar{flex:1;border-top:none}
+  #mobile-map-btn,#mobile-list-btn{display:flex}
+  #legend{bottom:10px;right:8px}
+}
 </style>
 </head>
 <body>
@@ -111,7 +140,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
     Munro Tracker
   </h1>
   <div id="stats">
-    <div class="stat"><div class="stat-num" id="remaining-count">0</div><div class="stat-label">of 282</div></div>
+    <div class="stat"><div class="stat-num" id="remaining-count">0</div><div class="stat-label">of 282 Munros</div></div>
     <div class="stat">
       <div id="progress-bar-wrap"><div id="progress-bar" style="width:0%"></div></div>
       <div id="pct-label">0% complete</div>
@@ -131,7 +160,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
   <button class="filter-btn danger" id="reset-btn">Reset</button>
 </div>
 <div id="main">
-  <div id="map"></div>
+  <div id="map">
+    <button id="mobile-map-btn" onclick="mobileExpand('map')">
+      <svg id="map-btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      <span id="map-btn-label">Expand map</span>
+    </button>
+  </div>
   <div id="sidebar">
     <div id="sidebar-tabs">
       <button class="tab-btn active" id="tab-munros">
@@ -142,6 +176,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
       </button>
       <button class="tab-btn" id="tab-trips">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>Trips
+      </button>
+      <button id="mobile-list-btn" onclick="mobileExpand('list')" title="Expand list">
+        <svg id="list-btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
       </button>
     </div>
     <div id="sidebar-subfilters"></div>
@@ -166,13 +203,11 @@ body{font-family:'Inter',system-ui,sans-serif;background:#F6F6F6;color:#2d2d2d;h
           <button id="days-plus">+</button>
           <span style="font-size:.78em;color:#aaa">days</span>
         </div>
-        <label class="te-label" style="margin-top:14px">Munros and Bothies</label>
         <div id="trip-select-mode-bar">
-          <span>Click markers on map to add/remove</span>
+          <span id="select-mode-text">Click markers on map to add/remove</span>
           <button id="select-done-btn">Done</button>
         </div>
-        <div id="te-items" class="te-items"></div>
-        <button id="trip-add-btn">+ Click map to add Munros or Bothies</button>
+        <div id="te-days-container"></div>
         <button id="trip-save-btn">Save Trip</button>
         <div id="trip-status-bar" style="display:flex;gap:6px;margin-top:8px;">
           <button id="btn-planned">Planned</button>
@@ -210,6 +245,19 @@ function initApp() {
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'OpenStreetMap contributors', maxZoom: 19
   }).addTo(map);
+
+  fetch('trails.geojson')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      L.geoJSON(data, {
+        style: { color: '#ff3399', weight: 2, opacity: 0.8 },
+        onEachFeature: function(feature, layer) {
+          if (feature.properties && feature.properties.name) {
+            layer.bindPopup(feature.properties.name);
+          }
+        }
+      }).addTo(map);
+    });
 
   var TRIP_COLORS = ['#e05c5c','#d4821a','#8e44ad','#1a7abf','#27ae60','#c0392b','#2980b9'];
 
@@ -649,7 +697,7 @@ function initApp() {
   };
 
   // ── Trip editor ───────────────────────────────────────────────────
-  var editingTripIdx=null, selectMode=false, pendingItems=[], currentStatus='planned';
+  var editingTripIdx=null, selectMode=false, overnightSelectMode=false, pendingItems=[], pendingOvernights={}, currentStatus='planned', activeDayForSelect=1;
 
   function updateStatusButtons(){
     var p=document.getElementById('btn-planned');
@@ -660,13 +708,20 @@ function initApp() {
   document.getElementById('btn-planned').onclick=function(){ currentStatus='planned'; updateStatusButtons(); };
   document.getElementById('btn-completed').onclick=function(){ currentStatus='completed'; updateStatusButtons(); };
   document.getElementById('trip-cancel-btn').onclick=function(){ closeTripEditor(); };
-  document.getElementById('select-done-btn').onclick=function(){ exitSelectMode(); };
-  document.getElementById('trip-add-btn').onclick=function(){ enterSelectMode(); };
+  document.getElementById('select-done-btn').onclick=function(){ if(overnightSelectMode) exitOvernightSelectMode(); else exitSelectMode(); };
   document.getElementById('trip-save-btn').onclick=function(){ saveTrip(); };
+  document.getElementById('days-plus').onclick=function(){
+    var el=document.getElementById('te-days'),v=parseInt(el.value)||1;
+    if(v<30){ el.value=v+1; renderPendingItems(); }
+  };
+  document.getElementById('days-minus').onclick=function(){
+    var el=document.getElementById('te-days'),v=parseInt(el.value)||1;
+    if(v>1){ var newMax=v-1; pendingItems.forEach(function(item){ if((item.day||1)>newMax) item.day=newMax; }); el.value=newMax; renderPendingItems(); }
+  };
   document.getElementById('trip-del-btn').onclick=function(){ deleteCurrentTrip(); };
 
   window.openNewTrip=function(){
-    editingTripIdx=null; pendingItems=[];
+    editingTripIdx=null; pendingItems=[]; pendingOvernights={};
     document.getElementById('te-name').value='';
     document.getElementById('te-desc').value='';
     document.getElementById('te-link').value='';
@@ -682,7 +737,8 @@ function initApp() {
   window.openEditTrip=function(idx){
     editingTripIdx=idx;
     var t=trips[idx];
-    pendingItems=t.items?t.items.slice():[];
+    pendingItems=t.items?t.items.map(function(item){ return {type:item.type,id:item.id,name:item.name,day:item.day||1}; }):[];
+    pendingOvernights=t.overnights?JSON.parse(JSON.stringify(t.overnights)):{};
     document.getElementById('te-name').value=t.name;
     document.getElementById('te-desc').value=t.desc||'';
     document.getElementById('te-link').value=t.link||'';
@@ -707,7 +763,7 @@ function initApp() {
   };
 
   function closeTripEditor(){
-    exitSelectMode();
+    exitSelectMode(); exitOvernightSelectMode();
     document.getElementById('trip-editor').classList.remove('open');
     if(activeTab==='trips') setTimeout(function(){ applyTripOverlay('all'); },50);
     else clearFilters();
@@ -726,24 +782,79 @@ function initApp() {
   window.deleteCurrentTrip=deleteCurrentTrip;
 
   function renderPendingItems(){
-    var c=document.getElementById('te-items'); c.innerHTML='';
-    pendingItems.forEach(function(item,i){
-      var tag=document.createElement('div');
-      tag.className='te-item-tag '+item.type;
-      tag.textContent=item.name;
-      var x=document.createElement('button');
-      x.textContent='x';
-      (function(idx){ x.onclick=function(){ pendingItems.splice(idx,1); renderPendingItems(); refreshTripHighlights(); }; }(i));
-      tag.appendChild(x);
-      c.appendChild(tag);
-    });
+    var numDays=parseInt(document.getElementById('te-days').value)||1;
+    var c=document.getElementById('te-days-container'); c.innerHTML='';
+    for(var d=1;d<=numDays;d++){
+      var dayItems=pendingItems.filter(function(item){ return (item.day||1)===d; });
+      var box=document.createElement('div'); box.className='te-day-box';
+      var lbl=document.createElement('div'); lbl.className='te-day-label';
+      lbl.textContent=numDays===1?'Munros & Bothies':'Day '+d;
+      box.appendChild(lbl);
+      var itemsEl=document.createElement('div'); itemsEl.className='te-day-items';
+      dayItems.forEach(function(item){
+        var realIdx=pendingItems.indexOf(item);
+        var tag=document.createElement('div'); tag.className='te-item-tag '+item.type;
+        tag.textContent=item.name;
+        var x=document.createElement('button'); x.textContent='×';
+        (function(idx){ x.onclick=function(){ pendingItems.splice(idx,1); renderPendingItems(); refreshTripHighlights(); }; }(realIdx));
+        tag.appendChild(x); itemsEl.appendChild(tag);
+      });
+      box.appendChild(itemsEl);
+      var isSelecting=selectMode&&activeDayForSelect===d;
+      var addBtn=document.createElement('button');
+      addBtn.className='te-day-add'+(isSelecting?' selecting':'');
+      addBtn.textContent=isSelecting?'✓ Selecting for this day — tap Done when finished':'+ Add Munros or Bothies';
+      (function(day){ addBtn.onclick=function(){
+        if(selectMode&&activeDayForSelect===day) exitSelectMode();
+        else enterSelectMode(day);
+      }; }(d));
+      box.appendChild(addBtn);
+      // Night section
+      var nightSec=document.createElement('div'); nightSec.className='te-night-section';
+      var nightHdr=document.createElement('div'); nightHdr.className='te-night-hdr'; nightHdr.textContent='Night';
+      nightSec.appendChild(nightHdr);
+      var ov=pendingOvernights[d];
+      if(ov){
+        var ntag=document.createElement('span');
+        ntag.className='te-night-tag'+(ov.type==='camp'?' camp':ov.type==='other'?' other':'');
+        ntag.textContent=ov.type==='bothy'?ov.name:ov.type==='camp'?'Camp':'Other';
+        var nclr=document.createElement('button'); nclr.textContent='×';
+        (function(day){ nclr.onclick=function(){ delete pendingOvernights[day]; renderPendingItems(); }; }(d));
+        ntag.appendChild(nclr); nightSec.appendChild(ntag);
+      }
+      var nightBtns=document.createElement('div'); nightBtns.className='te-night-btns';
+      var isOvSel=overnightSelectMode&&activeDayForSelect===d;
+      var bBtn=document.createElement('button');
+      bBtn.className='te-night-btn'+(isOvSel?' selecting':'');
+      bBtn.textContent=isOvSel?'Click a bothy on map...':'Bothy';
+      (function(day){ bBtn.onclick=function(){
+        if(overnightSelectMode&&activeDayForSelect===day) exitOvernightSelectMode();
+        else enterOvernightSelectMode(day);
+      }; }(d));
+      var cBtn=document.createElement('button');
+      cBtn.className='te-night-btn'+(ov&&ov.type==='camp'?' active':'');
+      cBtn.textContent='Camp';
+      (function(day){ cBtn.onclick=function(){ pendingOvernights[day]={type:'camp'}; if(overnightSelectMode) exitOvernightSelectMode(); else renderPendingItems(); }; }(d));
+      var oBtn=document.createElement('button');
+      oBtn.className='te-night-btn'+(ov&&ov.type==='other'?' active':'');
+      oBtn.textContent='Other';
+      (function(day){ oBtn.onclick=function(){ pendingOvernights[day]={type:'other'}; if(overnightSelectMode) exitOvernightSelectMode(); else renderPendingItems(); }; }(d));
+      nightBtns.appendChild(bBtn); nightBtns.appendChild(cBtn); nightBtns.appendChild(oBtn);
+      nightSec.appendChild(nightBtns);
+      box.appendChild(nightSec);
+      c.appendChild(box);
+    }
   }
 
-  function enterSelectMode(){
+  function enterSelectMode(day){
+    if(overnightSelectMode){ overnightSelectMode=false; }
+    activeDayForSelect=day||1;
     selectMode=true;
+    var numDays=parseInt(document.getElementById('te-days').value)||1;
+    document.getElementById('select-mode-text').textContent=numDays>1?'Adding to Day '+activeDayForSelect+' — click markers on map':'Click markers on map to add/remove';
     document.getElementById('trip-select-mode-bar').style.display='flex';
-    document.getElementById('trip-add-btn').style.display='none';
     map.getContainer().style.cursor='crosshair';
+    renderPendingItems();
     map.closePopup();
     munros.forEach(function(m){
       if(!munroMarkers[m.id]) return;
@@ -762,8 +873,8 @@ function initApp() {
   function exitSelectMode(){
     selectMode=false;
     document.getElementById('trip-select-mode-bar').style.display='none';
-    document.getElementById('trip-add-btn').style.display='block';
     map.getContainer().style.cursor='';
+    renderPendingItems();
     munros.forEach(function(m){
       if(!munroMarkers[m.id]) return;
       munroMarkers[m.id].off('click');
@@ -779,18 +890,51 @@ function initApp() {
   }
   window.exitSelectMode=exitSelectMode;
 
+  function enterOvernightSelectMode(day){
+    if(selectMode) exitSelectMode();
+    activeDayForSelect=day||1;
+    overnightSelectMode=true;
+    document.getElementById('select-mode-text').textContent='Click a bothy on the map for your night stop on Day '+activeDayForSelect;
+    document.getElementById('trip-select-mode-bar').style.display='flex';
+    map.getContainer().style.cursor='crosshair';
+    renderPendingItems(); map.closePopup();
+    bothyData.forEach(function(_,i){
+      if(!bothyMarkers[i]) return;
+      bothyMarkers[i].mk.off('click'); unbindBothyHover(i);
+      (function(bi,bname){ bothyMarkers[bi].mk.on('click',function(e){
+        L.DomEvent.stopPropagation(e);
+        pendingOvernights[activeDayForSelect]={type:'bothy',id:bi,name:bname};
+        exitOvernightSelectMode();
+      }); }(i,bothyData[i][0]));
+    });
+  }
+
+  function exitOvernightSelectMode(){
+    if(!overnightSelectMode) return;
+    overnightSelectMode=false;
+    document.getElementById('trip-select-mode-bar').style.display='none';
+    map.getContainer().style.cursor='';
+    renderPendingItems();
+    bothyData.forEach(function(_,i){
+      if(!bothyMarkers[i]) return;
+      bothyMarkers[i].mk.off('click');
+      bothyMarkers[i].mk.bindPopup(bothyMarkers[i].makePopup(),{maxWidth:220});
+      if(activeTab==='bothies') bindBothyHover(i);
+    });
+  }
+
   function addToTrip(type,id,name){
     var foundIdx=-1;
     for(var x=0;x<pendingItems.length;x++){ if(pendingItems[x].type===type&&pendingItems[x].id===id){ foundIdx=x; break; } }
     if(foundIdx>=0) pendingItems.splice(foundIdx,1);
-    else pendingItems.push({type:type,id:id,name:name});
+    else pendingItems.push({type:type,id:id,name:name,day:activeDayForSelect});
     renderPendingItems(); refreshTripHighlights();
   }
 
   function saveTrip(){
     var name=document.getElementById('te-name').value.trim();
     if(!name){ document.getElementById('te-name').focus(); return; }
-    var trip={name:name,desc:document.getElementById('te-desc').value.trim(),link:document.getElementById('te-link').value.trim(),days:parseInt(document.getElementById('te-days').value)||1,status:currentStatus,items:pendingItems.slice(),created:Date.now()};
+    var trip={name:name,desc:document.getElementById('te-desc').value.trim(),link:document.getElementById('te-link').value.trim(),days:parseInt(document.getElementById('te-days').value)||1,status:currentStatus,items:pendingItems.slice(),overnights:JSON.parse(JSON.stringify(pendingOvernights)),created:Date.now()};
     if(editingTripIdx!==null) trips[editingTripIdx]=trip; else trips.unshift(trip);
     saveTrips();
     document.getElementById('trip-editor').classList.remove('open');
@@ -802,8 +946,27 @@ function initApp() {
   updateStats();
   renderSidebar();
   updateStatusButtons();
-  // Initial state: munros tab — no bothy hover
-  // (hover is only enabled when switchTab('bothies') is called)
+
+  var expandPath = 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3';
+  var collapsePath = 'M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3';
+
+  window.mobileExpand = function(which) {
+    var main = document.getElementById('main');
+    var wasMapFull = main.classList.contains('map-full');
+    var wasListFull = main.classList.contains('list-full');
+    main.classList.remove('map-full','list-full');
+    if (which === 'map' && !wasMapFull) main.classList.add('map-full');
+    if (which === 'list' && !wasListFull) main.classList.add('list-full');
+    setTimeout(function(){ map.invalidateSize(); }, 50);
+    var mapFull = main.classList.contains('map-full');
+    var listFull = main.classList.contains('list-full');
+    var mapLbl = document.getElementById('map-btn-label');
+    var mapIco = document.getElementById('map-btn-icon');
+    var listIco = document.getElementById('list-btn-icon');
+    if (mapLbl) mapLbl.textContent = mapFull ? 'Show list' : 'Expand map';
+    if (mapIco) mapIco.querySelector('path').setAttribute('d', mapFull ? collapsePath : expandPath);
+    if (listIco) listIco.querySelector('path').setAttribute('d', listFull ? collapsePath : expandPath);
+  };
 }
 </script>
 </body>
